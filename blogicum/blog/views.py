@@ -1,4 +1,5 @@
 """Функция-обработчики для приложения blog."""
+from django.http import Http404  # type: ignore
 from django.shortcuts import render  # type: ignore
 
 posts = [
@@ -44,23 +45,24 @@ posts = [
     },
 ]
 
+posts_by_id = {post['id']: post for post in posts}
+
 
 def index(request):
     """Функция-обработчик на главную."""
-    template = 'blog/index.html'
-    return render(request, template, {'posts': posts})
+    return render(request, 'blog/index.html', {'posts': posts})
 
 
-def post_detail(request, id):
+def post_detail(request, post_id):
     """Функция-обработчик с конкретным постом."""
-    template = 'blog/detail.html'
-    post = posts[id]
+    post = posts_by_id.get(post_id)
+    if post is None:
+        raise Http404('Пост не найден.')
     context = {'post': post}
-    return render(request, template, context)
+    return render(request, 'blog/detail.html', context)
 
 
 def category_posts(request, category_slug):
     """Функция-обработчик для категорий постов."""
-    template = 'blog/category.html'
     context = {'category_slug': category_slug}
-    return render(request, template, context)
+    return render(request, 'blog/category.html', context)
