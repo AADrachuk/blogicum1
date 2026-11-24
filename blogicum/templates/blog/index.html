@@ -6,8 +6,8 @@
 
 {% block content %}
   <h1>Лента записей</h1>                        
-  {% for post in posts reversed%}
-      <hr>
-      {% include 'blog/includes/post.html' with full_text_link=True %}
+  {% for post in posts reversed %}
+    <hr>
+    {% include 'blog/includes/post.html' with full_text_link=True %}
   {% endfor %}
 {% endblock %}
